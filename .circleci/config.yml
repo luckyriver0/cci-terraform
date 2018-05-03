@@ -15,12 +15,13 @@ jobs:
       - image: hashicorp/terraform:0.11.7
     working_directory: ~/cci-terraform
     environment:
-      GOOGLE_CREDENTIALS: ~/gcloud-service-key.json
+      GOOGLE_CREDENTIALS: ${HOME}/gcloud-service-key.json
     steps:
       - checkout
       - run:
           name: plan
           command: |
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
   prod_build:
@@ -28,12 +29,13 @@ jobs:
       - image: hashicorp/terraform:0.11.7
     working_directory: ~/cci-terraform
     environment:
-      GOOGLE_CREDENTIALS: ~/gcloud-service-key.json
+      GOOGLE_CREDENTIALS: ${HOME}/gcloud-service-key.json
     steps:
       - checkout
       - run:
           name: build
           command: |
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform apply -var-file="prod.tfvars"
 workflows:
