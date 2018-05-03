@@ -15,4 +15,10 @@ resource "google_compute_instance" "front" {
       image = "${var.compute_engine_front["image"]}"
     }
   }
+
+  network_interface {
+    access_config {
+      // ephemeral ip
+    }
+  }
 }

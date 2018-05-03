@@ -1,13 +1,41 @@
 version: 2
 jobs:
-  build:
+  authenticate:
     docker:
-      - image: debian:stretch
+      - image: hashicorp/terraform:0.11.7
+      - run:
+          name: authenticate
+          command: |
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+            sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_PROJECT
+  plan:
+    docker:
+      - image: hashicorp/terraform:0.11.7
+    working_directory: ~/cci-terraform
     steps:
       - checkout
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: plan
+          command: terraform plan -var-file="prod.tfvars"
+  build:
+    docker:
+      - image: hashicorp/terraform:0.11.7
+    working_directory: ~/cci-terraform
+    steps:
+      - checkout
       - run:
-          name: Print the Current Time
-          command: date
+          name: build
+          command: terraform apply -var-file="prod.tfvars"
+
+workflows:
+  version: 2
+  plan-and-build:
+    jobs:
+      - authenticate
+      - plan:
+        requires:
+          - authenticate
+      - build:
+        requires:
+          - plan
