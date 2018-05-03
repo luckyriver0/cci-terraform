@@ -2,7 +2,7 @@ version: 2
 jobs:
   plan:
     docker:
-      - image: circleci/terraform:0.11.7
+      - image: hashicorp/terraform:0.11.7
     working_directory: ~/cci-terraform
     steps:
       - checkout
@@ -10,8 +10,7 @@ jobs:
           name: plan
           command: |
             echo $GCLOUD_SERVICE_KEY > ~/gcloud-service-key.json
-            GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
-            ls -l ~/gcloud-service-key.json
+            export GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
             terraform apply -var-file="prod.tfvars" -auto-approve
