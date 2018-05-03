@@ -34,8 +34,11 @@ workflows:
     jobs:
       - authenticate
       - plan:
-        requires:
-          - authenticate
-      - build:
-        requires:
-          - plan
+          requires:
+            - authenticate
+      - prod_build:
+          requires:
+            - plan
+          filters:
+            branches:
+              only: master
