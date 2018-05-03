@@ -19,7 +19,7 @@ jobs:
       - run:
           name: plan
           command: |
-            echo $GCLOUD_SERVICE_KEY > $HOME/gcloud-service-key.json
+            echo $GCLOUD_SERVICE_KEY > $GOOGLE_APPLICATION_CREDENTIALS
             echo $GOOGLE_APPLICATION_CREDENTIALS
             cat $GOOGLE_APPLICATION_CREDENTIALS
             terraform init -var-file="prod.tfvars"
