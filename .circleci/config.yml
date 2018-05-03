@@ -9,7 +9,7 @@ jobs:
           command: |
             echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-            gcloud --quiet config set project ${GCLOUD_PROJECT}
+            gcloud --quiet config set project $GCLOUD_PROJECT
   plan:
     docker:
       - image: hashicorp/terraform:0.11.7
@@ -19,8 +19,8 @@ jobs:
       - run:
           name: plan
           command: |
-            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-            GOOGLE_CREDENTIALS=${HOME}/gcloud-service-key.json
+            echo $GCLOUD_SERVICE_KEY > $HOME/gcloud-service-key.json
+            cat $HOME/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
   prod_build:
@@ -32,8 +32,8 @@ jobs:
       - run:
           name: build
           command: |
-            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-            GOOGLE_CREDENTIALS=${HOME}/gcloud-service-key.json
+            echo $GCLOUD_SERVICE_KEY > $HOME/gcloud-service-key.json
+            cat $HOME/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform apply -var-file="prod.tfvars"
 workflows:
