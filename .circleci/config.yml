@@ -3,6 +3,7 @@ jobs:
   authenticate:
     docker:
       - image: hashicorp/terraform:0.11.7
+    steps:
       - run:
           name: authenticate
           command: |
