@@ -2,7 +2,7 @@ version: 2
 jobs:
   plan:
     docker:
-      - image: hashicorp/terraform:full
+      - image: hashicorp/terraform:0.11.7
     working_directory: ~/cci-terraform
     steps:
       - checkout
@@ -13,7 +13,7 @@ jobs:
             export GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
-            terraform apply -var-file="prod.tfvars" -auto-approve
+            terraform destroy -var-file="prod.tfvars" -auto-approve
 workflows:
   version: 2
   plan-and-build:
