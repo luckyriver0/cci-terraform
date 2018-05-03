@@ -21,6 +21,7 @@ jobs:
           command: |
             echo $GCLOUD_SERVICE_KEY > ~/gcloud-service-key.json
             echo $GOOGLE_APPLICATION_CREDENTIALS
+            $GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
             cat $GOOGLE_APPLICATION_CREDENTIALS
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
