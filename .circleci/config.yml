@@ -40,6 +40,3 @@ workflows:
       - prod_build:
           requires:
             - plan
-          filters:
-            branches:
-              only: master
