@@ -2,14 +2,14 @@ version: 2
 jobs:
   authenticate:
     docker:
-      - image: hashicorp/terraform:0.11.7
+      - image: google/cloud-sdk:198.0.0
     steps:
       - run:
           name: authenticate
           command: |
             echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-            /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-            /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_PROJECT
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud --quiet config set project ${GCLOUD_PROJECT}
   plan:
     docker:
       - image: hashicorp/terraform:0.11.7
