@@ -1,8 +1,3 @@
-resource "google_compute_address" "front" {
-  name = "${var.env_prefix}-${var.service_name}-front"
-  region = "${var.region}"
-}
-
 resource "google_compute_instance" "front" {
   name = "${var.env_prefix}-${var.service_name}-front"
   machine_type = "${var.compute_engine_front["machine_type"]}"
@@ -17,6 +12,7 @@ resource "google_compute_instance" "front" {
   }
 
   network_interface {
+    network = "default"
     access_config {
       // ephemeral ip
     }
