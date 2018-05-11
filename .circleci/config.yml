@@ -19,8 +19,8 @@ jobs:
       - run:
           name: plan
           command: |
-            echo $GCLOUD_SERVICE_KEY > ~/gcloud-service-key.json
-            GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
+            echo $GCLOUD_SERVICE_KEY > $HOME/gcloud-service-key.json
+            GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
   prod_build:
@@ -40,10 +40,4 @@ workflows:
   version: 2
   plan-and-build:
     jobs:
-      - authenticate
-      - plan:
-          requires:
-            - authenticate
-      - prod_build:
-          requires:
-            - plan
+      - plan
