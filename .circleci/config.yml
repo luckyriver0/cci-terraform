@@ -19,8 +19,12 @@ jobs:
       - run:
           name: plan
           command: |
-            echo $HOME
-            echo ${HOME}
+            echo $HOME/gcloud-service-key.json
+            echo $GCLOUD_SERVICE_KEY > $HOME/gcloud-service-key.json
+            echo $GOOGLE_APPLICATION_CREDENTIALS
+            GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud-service-key.json
+            terraform init -var-file="prod.tfvars"
+            terraform plan -var-file="prod.tfvars"
   prod_build:
     docker:
       - image: hashicorp/terraform:0.11.7
