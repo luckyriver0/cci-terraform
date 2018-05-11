@@ -13,11 +13,6 @@ jobs:
   plan:
     docker:
       - image: circleci/terraform:0.11.7
-      - image: google/cloud-sdk:198.0.0
-        command: |
-            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-            gcloud --quiet config set project $GCLOUD_PROJECT
     working_directory: ~/cci-terraform
     steps:
       - checkout
@@ -26,10 +21,9 @@ jobs:
           command: |
             echo $GCLOUD_SERVICE_KEY > ~/gcloud-service-key.json
             GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
-            gcloud -v
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
-            terraform apply -var-file="prod.tfvars" -auto-approve
+            TF_LOG=DEBUG terraform apply -var-file="prod.tfvars" -auto-approve
 workflows:
   version: 2
   plan-and-build:
