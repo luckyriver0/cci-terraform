@@ -41,3 +41,6 @@ workflows:
   plan-and-build:
     jobs:
       - plan
+      - prod_build:
+          requires:
+            - plan
