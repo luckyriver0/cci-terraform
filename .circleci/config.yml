@@ -12,7 +12,8 @@ jobs:
             gcloud --quiet config set project $GCLOUD_PROJECT
   plan:
     docker:
-      - image: hashicorp/terraform:0.11.7
+      - image: google/cloud-sdk:198.0.0
+      - image: circleci/terraform:0.11.7
     working_directory: ~/cci-terraform
     steps:
       - checkout
@@ -23,29 +24,8 @@ jobs:
             GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
-  prod_build:
-    docker:
-      - image: google/cloud-sdk:198.0.0
-      - image: hashicorp/terraform:0.11.7
-    working_directory: ~/cci-terraform
-    steps:
-      - checkout
-      - run:
-          name: build
-          command: |
-            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-            gcloud --quiet config set project $GCLOUD_PROJECT
-
-            GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
-            terraform init -var-file="prod.tfvars"
-            terraform apply -var-file="prod.tfvars" -auto-approve
-
 workflows:
   version: 2
   plan-and-build:
     jobs:
       - plan
-      - prod_build:
-          requires:
-            - plan
