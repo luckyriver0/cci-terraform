@@ -6,9 +6,10 @@ jobs:
     steps:
       - run:
           name: authenticate
-          command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-          command: gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-          command: gcloud --quiet config set project $GCLOUD_PROJECT
+          command: |
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud --quiet config set project $GCLOUD_PROJECT
   plan:
     docker:
       - image: circleci/terraform:0.11.7
@@ -25,6 +26,7 @@ jobs:
           command: |
             echo $GCLOUD_SERVICE_KEY > ~/gcloud-service-key.json
             GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
+            gcloud -v
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
             terraform apply -var-file="prod.tfvars" -auto-approve
