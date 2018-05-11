@@ -20,6 +20,7 @@ jobs:
           name: plan
           command: |
             echo $GCLOUD_SERVICE_KEY > ~/gcloud-service-key.json
+            GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
             terraform init -var-file="prod.tfvars"
             terraform plan -var-file="prod.tfvars"
   prod_build:
