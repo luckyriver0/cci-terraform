@@ -12,8 +12,12 @@ jobs:
             gcloud --quiet config set project $GCLOUD_PROJECT
   plan:
     docker:
-      - image: google/cloud-sdk:198.0.0
       - image: circleci/terraform:0.11.7
+      - image: google/cloud-sdk:198.0.0
+        command: |
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud --quiet config set project $GCLOUD_PROJECT
     working_directory: ~/cci-terraform
     steps:
       - checkout
