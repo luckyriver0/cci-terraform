@@ -11,7 +11,7 @@ jobs:
           command: |
             echo $GCLOUD_SERVICE_KEY | base64 -d > ~/gcloud-service-key.json
             export GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
-            terraform init terraform init -backend-config="bucket=kpter-tfstat" -backend-config="prefix=prod"
+            terraform init -backend-config="bucket=kpter-tfstat" -backend-config="prefix=prod"
             terraform plan -var-file="prod.tfvars"
   apply:
     docker:
