@@ -4,6 +4,13 @@ provider "google" {
   region = "${var.region}"
 }
 
+terraform {
+  backend "gcs" {
+    bucket  = ""
+    prefix  = ""
+  }
+}
+
 module "kpter-infrastructure" {
   source = "./modules/gcp"
 
